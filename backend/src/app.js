@@ -34,6 +34,16 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+const path = require('path');
+
+// Serve static assets in production
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
+// Wildcard route to serve the React index.html for non-API routes (HTML5 history API fallback)
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled Server Error:', err.stack);

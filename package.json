@@ -1,0 +1,16 @@
+{
+  "name": "team-task-manager-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack Team Task Manager Monorepo",
+  "main": "backend/src/app.js",
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "build:frontend": "cd frontend && npm run build",
+    "postinstall": "npm run install:backend && npm run install:frontend && npm run build:frontend && cd backend && npx prisma generate && npx prisma db push",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [],
+  "author": "Pradyumn Chaurasia",
+  "license": "ISC"
+}
