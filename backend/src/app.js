@@ -1,4 +1,40 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
+
+// Dynamic & Resilient DATABASE_URL resolution
+const fs = require('fs');
+const path = require('path');
+
+let prismaDir = path.join(__dirname, '../prisma');
+if (!fs.existsSync(prismaDir)) {
+  prismaDir = path.join(__dirname, './prisma');
+}
+if (!fs.existsSync(prismaDir)) {
+  const possiblePrismaPaths = [
+    path.join(__dirname, '../prisma'),
+    path.join(__dirname, '../../backend/prisma'),
+    path.join(__dirname, './prisma')
+  ];
+  for (const p of possiblePrismaPaths) {
+    if (fs.existsSync(p)) {
+      prismaDir = p;
+      break;
+    }
+  }
+}
+
+// Make sure prisma directory exists, if not, create it
+if (!fs.existsSync(prismaDir)) {
+  try {
+    fs.mkdirSync(prismaDir, { recursive: true });
+  } catch (err) {
+    console.error("Failed to create prisma directory:", err);
+  }
+}
+
+const dbPath = path.join(prismaDir, 'dev.db');
+process.env.DATABASE_URL = `file:${dbPath}`;
+console.log(`[Database Setup] Dynamically resolved DATABASE_URL to: ${process.env.DATABASE_URL}`);
+
 const express = require('express');
 const cors = require('cors');
 
@@ -86,10 +122,6 @@ app.get('/api/debug-paths', (req, res) => {
 
   res.json(debugInfo);
 });
-
-const path = require('path');
-
-const fs = require('fs');
 
 // Self-healing path discovery for frontend static files
 const possibleDistPaths = [
