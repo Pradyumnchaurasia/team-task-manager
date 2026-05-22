@@ -4,7 +4,7 @@
   "description": "REST API backend for Team Task Manager",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "npx prisma db push || echo 'Prisma push failed' && node src/app.js",
     "dev": "nodemon src/app.js",
     "db:migrate": "prisma migrate dev --name init",
     "db:seed": "node src/utils/seed.js",
