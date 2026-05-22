@@ -168,6 +168,40 @@ const server = app.listen(PORT, () => {
   console.log(`📡 Listening on: http://localhost:${PORT}`);
   console.log(`📅 Node Environment: ${process.env.NODE_ENV || 'production'}`);
   console.log(`=============================================`);
+
+  // Run Prisma DB Push asynchronously after server starts to ensure immediate port binding
+  const { exec } = require('child_process');
+  let schemaPath = path.join(__dirname, '../prisma/schema.prisma');
+  if (!fs.existsSync(schemaPath)) {
+    schemaPath = path.join(__dirname, './prisma/schema.prisma');
+  }
+  if (!fs.existsSync(schemaPath)) {
+    const possibleSchemaPaths = [
+      path.join(__dirname, '../prisma/schema.prisma'),
+      path.join(__dirname, '../../backend/prisma/schema.prisma'),
+      path.join(__dirname, './prisma/schema.prisma')
+    ];
+    for (const p of possibleSchemaPaths) {
+      if (fs.existsSync(p)) {
+        schemaPath = p;
+        break;
+      }
+    }
+  }
+
+  if (fs.existsSync(schemaPath)) {
+    console.log(`[Database Push] Found schema at: ${schemaPath}. Starting background push...`);
+    exec(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, (err, stdout, stderr) => {
+      if (err) {
+        console.error("[Database Push Error] Background Prisma push failed:", err.message);
+        console.error(stderr);
+      } else {
+        console.log("[Database Push Success] Background Prisma push completed successfully:\n", stdout);
+      }
+    });
+  } else {
+    console.warn("[Database Push Warning] Prisma schema not found. Skipping background push.");
+  }
 });
 
 module.exports = app;
