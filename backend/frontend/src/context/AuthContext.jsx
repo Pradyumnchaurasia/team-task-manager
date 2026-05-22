@@ -22,7 +22,8 @@ export const AuthProvider = ({ children }) => {
           }
         });
 
-        if (response.ok) {
+        const contentType = response.headers.get('content-type');
+        if (response.ok && contentType && contentType.includes('application/json')) {
           const data = await response.json();
           setUser(data.user);
         } else {
@@ -49,6 +50,11 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify({ email, password })
     });
 
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('The live API service is currently starting up. Please wait 10 seconds and try again.');
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -69,6 +75,11 @@ export const AuthProvider = ({ children }) => {
       },
       body: JSON.stringify({ name, email, password })
     });
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('The live API service is currently starting up. Please wait 10 seconds and try again.');
+    }
 
     const data = await response.json();
 
