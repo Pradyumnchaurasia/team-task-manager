@@ -34,7 +34,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Temporary debug route to inspect paths on Railway
 app.get('/api/debug-paths', (req, res) => {
   const fs = require('fs');
   const path = require('path');
@@ -42,8 +41,6 @@ app.get('/api/debug-paths', (req, res) => {
   const debugInfo = {
     cwd: process.cwd(),
     dirname: __dirname,
-    resolvedDistPath: path.resolve(__dirname, '../../frontend/dist'),
-    resolvedIndexPath: path.resolve(__dirname, '../../frontend/dist/index.html'),
     env: {
       NODE_ENV: process.env.NODE_ENV,
       PORT: process.env.PORT
@@ -51,18 +48,18 @@ app.get('/api/debug-paths', (req, res) => {
   };
 
   try {
-    debugInfo.distExists = fs.existsSync(debugInfo.resolvedDistPath);
-    if (debugInfo.distExists) {
-      debugInfo.distContents = fs.readdirSync(debugInfo.resolvedDistPath);
-    } else {
-      const parentPath = path.resolve(__dirname, '../../frontend');
-      debugInfo.frontendExists = fs.existsSync(parentPath);
-      if (debugInfo.frontendExists) {
-        debugInfo.frontendContents = fs.readdirSync(parentPath);
+    debugInfo.appContents = fs.readdirSync('/app');
+    if (fs.existsSync('/app/frontend')) {
+      debugInfo.frontendExists = true;
+      debugInfo.frontendContents = fs.readdirSync('/app/frontend');
+      if (fs.existsSync('/app/frontend/dist')) {
+        debugInfo.distExists = true;
+        debugInfo.distContents = fs.readdirSync('/app/frontend/dist');
       } else {
-        const rootPath = path.resolve(__dirname, '../..');
-        debugInfo.rootContents = fs.readdirSync(rootPath);
+        debugInfo.distExists = false;
       }
+    } else {
+      debugInfo.frontendExists = false;
     }
   } catch (err) {
     debugInfo.error = err.message;
