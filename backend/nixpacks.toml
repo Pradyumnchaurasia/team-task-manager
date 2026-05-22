@@ -8,8 +8,9 @@ cmds = ["npm run build"]
 [start]
 cmd = "npx prisma db push && node src/app.js"
 
+providers = ["node"]
+
 [variables]
 DATABASE_URL = "file:/app/backend/prisma/dev.db"
 JWT_SECRET = "super-secret-task-manager-token-key-12345"
 NODE_ENV = "production"
-providers = ["node"]

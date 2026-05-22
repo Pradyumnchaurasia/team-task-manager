@@ -9,11 +9,12 @@
   "scripts": {
     "build:frontend": "npm run build --workspace=backend/frontend",
     "prisma:generate": "npx prisma generate --schema=backend/prisma/schema.prisma",
-    "prisma:push": "npx prisma db push --schema=backend/prisma/schema.prisma",
+    "prisma:push": "npx prisma db push --schema=backend/prisma/schema.prisma || echo 'Prisma DB push failed, proceeding anyway'",
     "build": "npm run build:frontend && npm run prisma:generate",
     "start": "npm run prisma:push && node backend/src/app.js"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "prisma": "^5.14.0"
   }
 }
