@@ -1,5 +1,7 @@
 # 🚀 Team Task Manager - Full-Stack Application
 
+### 🌐 Live Deployment: [team-task-manager-production-86af9.up.railway.app](https://team-task-manager-production-86af9.up.railway.app/)
+
 Team Task Manager is a premium, secure, and beautiful Full-Stack application designed to facilitate seamless project collaboration. The application enforces **Role-Based Access Control (RBAC)** allowing users to operate with **Admin** or **Member** privileges.
 
 The interface is styled entirely in **Vanilla CSS** with a stunning dark-glassmorphism theme, glowing neon accents, and responsive layout structures, avoiding bulky styling frameworks entirely.
