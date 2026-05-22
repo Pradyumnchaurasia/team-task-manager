@@ -34,6 +34,43 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Temporary debug route to inspect paths on Railway
+app.get('/api/debug-paths', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  
+  const debugInfo = {
+    cwd: process.cwd(),
+    dirname: __dirname,
+    resolvedDistPath: path.resolve(__dirname, '../../frontend/dist'),
+    resolvedIndexPath: path.resolve(__dirname, '../../frontend/dist/index.html'),
+    env: {
+      NODE_ENV: process.env.NODE_ENV,
+      PORT: process.env.PORT
+    }
+  };
+
+  try {
+    debugInfo.distExists = fs.existsSync(debugInfo.resolvedDistPath);
+    if (debugInfo.distExists) {
+      debugInfo.distContents = fs.readdirSync(debugInfo.resolvedDistPath);
+    } else {
+      const parentPath = path.resolve(__dirname, '../../frontend');
+      debugInfo.frontendExists = fs.existsSync(parentPath);
+      if (debugInfo.frontendExists) {
+        debugInfo.frontendContents = fs.readdirSync(parentPath);
+      } else {
+        const rootPath = path.resolve(__dirname, '../..');
+        debugInfo.rootContents = fs.readdirSync(rootPath);
+      }
+    }
+  } catch (err) {
+    debugInfo.error = err.message;
+  }
+
+  res.json(debugInfo);
+});
+
 const path = require('path');
 
 // Serve static assets in production
