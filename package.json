@@ -1,16 +1,19 @@
 {
   "name": "team-task-manager-monorepo",
   "version": "1.0.0",
-  "description": "Full-stack Team Task Manager Monorepo",
-  "main": "backend/src/app.js",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "install:backend": "cd backend && npm install",
-    "install:frontend": "cd frontend && npm install",
-    "build:frontend": "cd frontend && npm run build",
-    "build": "npm run install:backend && npm run install:frontend && npm run build:frontend && cd backend && npx prisma generate && npx prisma db push",
-    "start": "cd backend && npm start"
+    "build:frontend": "npm run build --workspace=frontend",
+    "prisma:generate": "npx prisma generate --schema=backend/prisma/schema.prisma",
+    "prisma:push": "npx prisma db push --schema=backend/prisma/schema.prisma",
+    "build": "npm run build:frontend && npm run prisma:generate",
+    "start": "npm run prisma:push && node backend/src/app.js"
   },
-  "keywords": [],
-  "author": "Pradyumn Chaurasia",
-  "license": "ISC"
+  "dependencies": {
+    "prisma": "^5.14.0"
+  }
 }
