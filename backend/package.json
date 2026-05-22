@@ -8,7 +8,8 @@
     "dev": "nodemon src/app.js",
     "db:migrate": "prisma migrate dev --name init",
     "db:seed": "node src/utils/seed.js",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend && prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",

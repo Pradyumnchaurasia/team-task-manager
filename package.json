@@ -4,10 +4,10 @@
   "private": true,
   "workspaces": [
     "backend",
-    "frontend"
+    "backend/frontend"
   ],
   "scripts": {
-    "build:frontend": "npm run build --workspace=frontend",
+    "build:frontend": "npm run build --workspace=backend/frontend",
     "prisma:generate": "npx prisma generate --schema=backend/prisma/schema.prisma",
     "prisma:push": "npx prisma db push --schema=backend/prisma/schema.prisma",
     "build": "npm run build:frontend && npm run prisma:generate",

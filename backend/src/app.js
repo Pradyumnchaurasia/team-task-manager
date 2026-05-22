@@ -78,6 +78,7 @@ const fs = require('fs');
 // Self-healing path discovery for frontend static files
 const possibleDistPaths = [
   path.join(__dirname, '../../frontend/dist'),
+  path.join(__dirname, '../frontend/dist'),
   path.join(__dirname, '../dist'),
   path.join(__dirname, './dist'),
   path.join(__dirname, '../../dist')
