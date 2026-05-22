@@ -6,7 +6,7 @@ cmds = ["npm install", "npm install --prefix frontend"]
 cmds = ["npm run build"]
 
 [start]
-cmd = "npx prisma db push && node src/app.js"
+cmd = "node src/app.js"
 
 providers = ["node"]
 
