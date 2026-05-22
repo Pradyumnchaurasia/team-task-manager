@@ -73,16 +73,35 @@ app.get('/api/debug-paths', (req, res) => {
 
 const path = require('path');
 
+const fs = require('fs');
+
+// Self-healing path discovery for frontend static files
+const possibleDistPaths = [
+  path.join(__dirname, '../../frontend/dist'),
+  path.join(__dirname, '../dist'),
+  path.join(__dirname, './dist'),
+  path.join(__dirname, '../../dist')
+];
+
+let distPath = possibleDistPaths[0]; // Default fallback
+for (const p of possibleDistPaths) {
+  if (fs.existsSync(path.join(p, 'index.html'))) {
+    distPath = p;
+    console.log(`[Static Serve] Found frontend build files at: ${distPath}`);
+    break;
+  }
+}
+
 // Serve static assets in production
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+app.use(express.static(distPath));
 
 // Wildcard route to serve the React index.html for non-API routes (HTML5 history API fallback)
 app.get(/^(?!\/api).*/, (req, res) => {
-  const indexPath = path.join(__dirname, '../../frontend/dist/index.html');
+  const indexPath = path.join(distPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
       console.error(`[Static Serve Error] Failed to send index.html at ${indexPath}:`, err.message);
-      res.status(500).send('Frontend build files not found. Please ensure the project is fully built on Railway.');
+      res.status(500).send(`Frontend build files not found. Active search path: ${distPath}. Please ensure the project is fully built on Railway.`);
     }
   });
 });
