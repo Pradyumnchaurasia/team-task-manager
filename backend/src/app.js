@@ -41,7 +41,13 @@ app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
 // Wildcard route to serve the React index.html for non-API routes (HTML5 history API fallback)
 app.get(/^(?!\/api).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+  const indexPath = path.join(__dirname, '../../frontend/dist/index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error(`[Static Serve Error] Failed to send index.html at ${indexPath}:`, err.message);
+      res.status(500).send('Frontend build files not found. Please ensure the project is fully built on Railway.');
+    }
+  });
 });
 
 // Global error handler
