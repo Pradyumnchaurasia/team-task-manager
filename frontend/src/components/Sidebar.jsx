@@ -30,7 +30,7 @@ const Sidebar = () => {
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-logo">
           <div className="logo-glow"></div>
-          <span>Antigravity Tasks</span>
+          <span>Team Task Manager</span>
         </div>
 
         {/* User Card */}

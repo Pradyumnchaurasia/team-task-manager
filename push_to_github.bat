@@ -3,7 +3,7 @@ title Push Project to GitHub - Team Task Manager
 color 0b
 
 echo ==============================================================
-echo   🚀 ANTIGRAVITY - AUTOMATED GITHUB UPLOAD HELPER
+echo   🚀 TEAM TASK MANAGER - AUTOMATED GITHUB UPLOAD HELPER
 echo ==============================================================
 echo.
 
