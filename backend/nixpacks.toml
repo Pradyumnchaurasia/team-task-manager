@@ -1,0 +1,15 @@
+# Nixpacks configuration for Team Task Manager Backend
+[phases.install]
+cmds = ["npm install", "npm install --prefix frontend"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npx prisma db push && node src/app.js"
+
+[variables]
+DATABASE_URL = "file:./prisma/dev.db"
+JWT_SECRET = "super-secret-task-manager-token-key-12345"
+NODE_ENV = "production"
+providers = ["node"]

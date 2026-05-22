@@ -7,3 +7,8 @@ cmds = ["npm run build"]
 
 [start]
 cmd = "npm run start"
+
+[variables]
+DATABASE_URL = "file:./backend/prisma/dev.db"
+JWT_SECRET = "super-secret-task-manager-token-key-12345"
+NODE_ENV = "production"
